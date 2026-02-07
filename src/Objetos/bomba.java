@@ -16,7 +16,7 @@ public class bomba {
     private BufferedImage imagem;
     private boolean estaPlantada = false;
     private boolean explodiu = false;
-    private final long TEMPO_DE_FUSAO = 3000;
+    private final long TEMPO_DE_FUSAO = 1000;
     private long tempoDesdePlantada = 0;
     private final long DURACAO_DA_EXPLOSAO = 500;
     private long tempoNaExplosao = 0;

@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class TelaDeFundo extends JPanel implements ActionListener, KeyListener {
+private GerenciadorBanco banco = new GerenciadorBanco();
     private Timer timer;
     private Chest ch;
     private bomberman bomberman;
@@ -87,6 +88,21 @@ public class TelaDeFundo extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_F5) {
+            banco.salvarJogo(bomberman.getX(), bomberman.getY(), contador, caixas);
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_F9) {
+            GerenciadorBanco.SaveData save = banco.carregarJogo();
+            if (save != null) {
+                bomberman.setX(save.x);
+                bomberman.setY(save.y);
+                contador = save.bombas;
+                restaurarCaixas(save.caixas);
+                repaint();
+                System.out.println("JOGO CARREGADO!");
+            }
+        }
         if (jogoVencido) {
             return;
         }
@@ -216,6 +232,23 @@ public class TelaDeFundo extends JPanel implements ActionListener, KeyListener {
                 jogoVencido = true;
                 timer.stop();
                 System.out.println("Você Venceu!");
+            }
+        }
+    }
+    private void restaurarCaixas(String dados) {
+        if (dados == null || dados.isEmpty()) return;
+
+        caixas.clear();
+        String[] pares = dados.split(";");
+
+        for (String par : pares) {
+            if (!par.trim().isEmpty()) {
+                String[] coords = par.split(",");
+                if (coords.length == 2) {
+                    int cx = Integer.parseInt(coords[0]);
+                    int cy = Integer.parseInt(coords[1]);
+                    caixas.add(new Caixa(cx, cy));
+                }
             }
         }
     }
